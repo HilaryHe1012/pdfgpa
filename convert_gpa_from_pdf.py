@@ -11,25 +11,28 @@ def grade_converter(pdf_file):
     reader = PyPDF2.PdfReader(pdf_file)
 
     # grab all contents in the pdf
-    contents = ""
+    page_content = ''
+
     for page in reader.pages:
-        contents += page.extract_text()
+        # flag to start collecting grades after encountering "Grade" keyword
+        start_collecting = False
 
-    # convert it into a list separated by words
-    words = contents.split()
+        page_content = page.extract_text()
+        # convert it into a list separated by words
+        words = page_content.split()
 
-    for word in words:
-        if word in grade_to_gpa.keys():
-            cgpa += grade_to_gpa[word]
-            grades.append(word)
+        for word in words:
+            # check if the word contains "Grade" and set the flag to True
+            if "Grade" in word:
+                start_collecting = True
+                continue 
+
+             # if the flag is True, collect the grades
+            if start_collecting and word in grade_to_gpa.keys():
+                cgpa += grade_to_gpa[word]
+                grades.append(word)
     return round(cgpa / len(grades), 2)
 
 def main():
-    pdf_url = "MCM_TS_MCOFF-Year3-Fall.pdf"
-    kush = "kush_transcript.pdf"
-    timmy = "timmy_transcript.pdf"
-    my_cgpa = grade_converter(timmy)
-    print(my_cgpa)
-
-
+    return 
 main()
