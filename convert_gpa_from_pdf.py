@@ -34,5 +34,8 @@ def grade_converter(pdf_file):
     return round(cgpa / len(grades), 2)
 
 def main():
+    my_transcript = "transcript.pdf"
+    my_gpa = grade_converter(my_transcript)
+    print(my_gpa)
     return 
 main()
