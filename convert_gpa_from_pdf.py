@@ -9,6 +9,12 @@ class Course:
     def __init__(self, name, grade):
         self.name = name
         self.grade = grade
+        self.high_grade = grade[0] == 'A'
+        # print(self.grade)
+        # if grade[0] == 'A':
+            # print('high grade', grade)
+          
+
     def get_name(self):
         return self.name
     def get_grade(self):
@@ -21,6 +27,9 @@ class Course:
         return f"{self.name}"
     def print_all_grades(self):
         return f"{self.grade}"
+    
+    def to_dict(self):
+        return {"name": self.name, "grade": self.grade, "high_grade": self.high_grade}
 
 # a helper function that initializes all the courses in 'Course' type
 # and returns a list of 'Course' object
@@ -28,16 +37,16 @@ def initalize_courses(course_list):
     courses = []
     for item in course_list:
         cur_name = ''
-        cur = Course(None, None)
+        # cur = Course(None, None)
         words = item.split()
         for word in words:
-            if word in grade_to_gpa.keys():
-                cur.grade = word
+            if word in grade_to_gpa:
+                grade = word
             else:
                 if '/' not in word:
                     cur_name += word + ' '
-                cur.name = cur_name 
-        courses.append(cur)
+                name = cur_name 
+        courses.append(Course(name, grade))
     return courses
 
 # -------------------------------------
@@ -121,6 +130,20 @@ def main():
     # to print all the courses with grades, uncomment the following:
     for course in c: print(course)
     gpa = grade_converter(c)
-    print('cgpa is:', gpa)
+    # print('cgpa is:', gpa)
     return 
-main()
+# main()
+
+def full_extract(pdf):
+    text = extract_course(pdf)
+    c_list = clean_course_list(text)
+    c = initalize_courses(c_list)
+    gpa = grade_converter(c)
+    good_courses = [course for course in c if course.high_grade]
+    # for course in good_courses: print(course)
+    dict_c = [course.to_dict() for course in c]
+    dict_good_courses = [course.to_dict() for course in good_courses]
+    return {"gpa": gpa, "course_list": dict_c, "high_grade_course_list":dict_good_courses}
+
+
+# print(full_extract('transcript.pdf'))

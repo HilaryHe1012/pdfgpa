@@ -1,5 +1,5 @@
 from flask import Flask, request, jsonify
-from convert_gpa_from_pdf import grade_converter
+from convert_gpa_from_pdf import extract_course, grade_converter
 from flask_cors import CORS 
 
 app = Flask(__name__)
@@ -21,8 +21,8 @@ def gpa():
 
     # check if file is valid pdf type
     if allowed_file(transcript_file.filename):
-        gpa = grade_converter(transcript_file)
-        return jsonify({'gpa': gpa}),201
+        data = extract_course(transcript_file)
+        return jsonify(data),201
     else:
         return jsonify({'error': 'Invalid file type'}),400
 
