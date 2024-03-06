@@ -1,8 +1,8 @@
 import PyPDF2
-import json
 
 # used to convert letter grades to a 4.0 gpa scale
 grade_to_gpa = {"A+": 4.0, "A": 3.9, "A-": 3.7, "B+":3.3, "B":3, "B-": 2.7, "C+": 2.3, "C": 2, "C-":1.7, "D+":1.3, "D": 1, "D-": 0.7, "F": 0}
+# words to filter in the parser
 keywords = ['Course', 'Title','Term', 'Enrolment', 'Attm./Earned', 'Units']
 
 class Course:
