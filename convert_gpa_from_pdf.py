@@ -37,10 +37,9 @@ def initalize_courses(course_list):
     courses = []
     for item in course_list:
         cur_name = ''
-        # cur = Course(None, None)
         words = item.split()
         for word in words:
-            if word in grade_to_gpa:
+            if word in grade_to_gpa or word == 'COM':
                 grade = word
             else:
                 if '/' not in word:
@@ -86,8 +85,8 @@ def clean_course_list(data):
           merged_courses.append(tmp[0])
           i = tmp[1] + 1
       else:
-          merged_courses.append(item)
-          i += 1
+            merged_courses.append(item)
+      i += 1
    return merged_courses[:-1] # the last string is courses with no grades -> thus dropped
 
 # helper function to return the merged version of the first course for each table
@@ -115,7 +114,7 @@ def grade_converter(c): # takes in a list of Course object
     valid_courses = 0
     for course in c:
         cur_grade = course.get_grade()
-        if cur_grade:
+        if cur_grade and cur_grade != 'COM':
             cgpa += grade_to_gpa[course.get_grade()]
             valid_courses += 1            
     return round(cgpa / valid_courses, 2)
@@ -126,12 +125,8 @@ def main():
     text = extract_course(my_transcript)
     c_list = clean_course_list(text)
     c = initalize_courses(c_list)
-
-    # to print all the courses with grades, uncomment the following:
-    for course in c: print(course)
-    gpa = grade_converter(c)
-    # print('cgpa is:', gpa)
-    return 
+    # for cs in c: print(cs)
+    return
 # main()
 
 def full_extract(pdf):
@@ -140,8 +135,11 @@ def full_extract(pdf):
     c = initalize_courses(c_list)
     gpa = grade_converter(c)
     good_courses = [course for course in c if course.high_grade]
-    # for course in good_courses: print(course)
-    dict_c = [course.to_dict() for course in c]
+    dict_c = []
+    # Get rid of course with grade COM
+    for course in c:
+        if course.grade != 'COM':
+            dict_c.append(course.to_dict())
     dict_good_courses = [course.to_dict() for course in good_courses]
     return {"gpa": gpa, "course_list": dict_c, "high_grade_course_list":dict_good_courses}
 
