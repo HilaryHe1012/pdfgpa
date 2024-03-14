@@ -93,18 +93,16 @@ def clean_course_list(data):
 def first_course(data, i):
     current_course = ''
     while i < len(data):
-        # because I check for grades the courses with not grades are 
-        # not parsed properly
-        if data[i] in grade_to_gpa.keys():
-            current_course += data[i]
-            break
         words = data[i].split()
         for word in words:
-            if word not in keywords:
-                if 'Grade' not in word:
+            if word not in keywords and 'Grade' not in word:
                     current_course += ''.join(word) + ' '
+        # because I check for grades the courses with not grades are 
+        # not parsed properly
+        if data[i] in grade_to_gpa or data[i] == 'COM':
+            break
         i += 1
-    return [current_course, i]
+    return [current_course, i-1]
 
 # -------------------------------------
 #       Compute 4.0 scale cgpa
@@ -122,9 +120,12 @@ def grade_converter(c): # takes in a list of Course object
 def main():
     my_transcript = "transcript.pdf"
     timmy = "timmy.pdf"
-    text = extract_course(my_transcript)
+    owen = "owen_transcript.pdf"
+    text = extract_course(owen)
     c_list = clean_course_list(text)
     c = initalize_courses(c_list)
+    # print(text)
+    # print(c_list)
     # for cs in c: print(cs)
     return
 # main()
@@ -144,4 +145,4 @@ def full_extract(pdf):
     return {"gpa": gpa, "course_list": dict_c, "high_grade_course_list":dict_good_courses}
 
 
-# print(full_extract('transcript.pdf'))
+# print(full_extract('Owen_transcript.pdf'))
