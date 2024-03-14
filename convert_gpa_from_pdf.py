@@ -83,7 +83,7 @@ def clean_course_list(data):
       if item == 'Course': 
           tmp = first_course(data, i)
           merged_courses.append(tmp[0])
-          i = tmp[1] + 1
+          i = tmp[1]
       else:
             merged_courses.append(item)
       i += 1
@@ -102,7 +102,7 @@ def first_course(data, i):
         if data[i] in grade_to_gpa or data[i] == 'COM':
             break
         i += 1
-    return [current_course, i-1]
+    return [current_course, i]
 
 # -------------------------------------
 #       Compute 4.0 scale cgpa
